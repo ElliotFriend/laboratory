@@ -38,7 +38,7 @@ const awaitElementExistence = (selector: string) => {
 };
 
 /**
- * The other Hackaround. 
+ * The other Hackaround.
  * Could probably be replaced by manipulating state-management directly.
  */
 const click = (selector: string) => {
@@ -138,16 +138,56 @@ const steps: Step.StepOptions[] = [
         ],
     },
     {
-        title: 'Resources',
-        text: 'For most resource (e.g. accounts in this case) you can select if you want to query a specific resource by its id or if you want to list multiple. In any case Laboratory will show you fields and options you can (or need to) specify to get a result that matches your needs.',
+        title: 'Endpoints',
+        text: 'For most resource (e.g. accounts in this case) you can select if you want to query a specific resource by its id or if you want to list multiple.',
         attachTo: {
             element: '.EndpointExplorer__picker div:nth-child(2) nav',
             on: 'bottom',
         },
+        buttons: [
+            {
+                classes: 's-button',
+                text: 'Continue',
+                action() {
+                    click('[data-testid="endpoint-explorer-endpoint"] nav li:last-child');
+                    this.next();
+                },
+            },
+        ],
+    },
+    {
+        beforeShowPromise: () => {
+            awaitElementExistence('.EndpointSetup__title');
+            document.querySelector('.PubKeyPicker').firstChild.firstElementChild.value = 'GCDNJUBQSX7AJWLJACMJ7I4BC3Z47BQUTMHEICZLE6MU4KQBRYG5JY6B';
+        },
+        title: 'Options',
+        text: 'Here is where the endpoint options will be displayed.',
+        attachTo: {
+            element: '.EndpointExplorer__setup div:nth-child(2)',
+            on: 'top',
+        },
+        buttons: [
+            {
+                classes: 's-button',
+                text: 'Continue',
+                action() {
+                    click('[data-testid="page-endpoint-inputs"] .optionsTable:nth-child(6) button.s-button');
+                },
+            },
+        ],
+    },
+    {
+        beforeShowPromise: () => awaitElementExistence('.EndpointResult'),
+        title: 'Results',
+        text: 'Here is where the Horizon results will be displayed.',
+        attachTo: {
+            element: '.EndpointResult',
+            on: 'top',
+        },
     },
     {
         title: 'Build Transaction',
-        text: 'Laboratories Transaction Builder lets you compose transactions without writing a single line of code.',
+        text: 'Laboratories Transaction Builder lets you compose transactions without writing a single line of code. Laboratory will show you fields and options you can (or need to) specify to get a result that matches your needs.',
         attachTo: {
             element: '[href="#txbuilder"]',
             on: 'bottom',
@@ -164,7 +204,7 @@ const steps: Step.StepOptions[] = [
         text: 'This form allows you to set general transaction parameters like the source account, sequence number or memo.',
         attachTo: {
             element: '.TransactionOp__config',
-            on: 'top', 
+            on: 'top',
         },
     },
     {
